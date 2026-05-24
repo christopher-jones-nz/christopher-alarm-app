@@ -45,6 +45,9 @@ export default function AlarmListScreen({ navigation }: Props) {
             onPress={() =>
               navigation.navigate("AlarmEdit", { alarmId: item.id })
             }
+            onLongPress={() =>
+              navigation.navigate("Puzzle", { alarmId: item.id })
+            }
           >
             <View style={styles.rowText}>
               <Text style={styles.time}>{item.time}</Text>
