@@ -15,6 +15,7 @@ import {
 import { RootStackParamList } from "../../App";
 import { deleteAlarm, loadAlarms, upsertAlarm } from "../storage";
 import { Alarm, Difficulty } from "../types";
+import { cancelAlarm, rescheduleAlarm } from "../notifications/scheduler";
 
 type Props = NativeStackScreenProps<RootStackParamList, "AlarmEdit">;
 
@@ -90,6 +91,7 @@ export default function AlarmEditScreen({ navigation, route }: Props) {
 
   const save = async () => {
     await upsertAlarm(alarm);
+    await rescheduleAlarm(alarm);
     navigation.goBack();
   };
 
@@ -102,6 +104,7 @@ export default function AlarmEditScreen({ navigation, route }: Props) {
         style: "destructive",
         onPress: async () => {
           await deleteAlarm(editingId);
+          await cancelAlarm(editingId);
           navigation.goBack();
         },
       },

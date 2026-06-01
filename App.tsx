@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import AlarmListScreen from "./src/screens/AlarmListScreen";
 import AlarmEditScreen from "./src/screens/AlarmEditScreen";
 import PuzzleScreen from "./src/screens/PuzzleScreen";
+import { setupNotifications } from "./src/notifications/setup";
 
 export type RootStackParamList = {
   AlarmList: undefined;
@@ -14,6 +16,10 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  useEffect(() => {
+    setupNotifications();
+  }, []);
+
   return (
     <NavigationContainer>
       <StatusBar style="auto" />

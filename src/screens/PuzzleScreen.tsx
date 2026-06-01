@@ -12,6 +12,8 @@ import { RootStackParamList } from "../../App";
 import { generateProblems } from "../math/generator";
 import { loadAlarms } from "../storage";
 import { Alarm, MathProblem, PROBLEMS_PER_ALARM } from "../types";
+import notifee from "@notifee/react-native";
+import { rescheduleAlarm } from "../notifications/scheduler";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Puzzle">;
 
@@ -45,7 +47,7 @@ export default function PuzzleScreen({ navigation, route }: Props) {
 
   const current = problems[index];
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!current) return;
     const parsed = parseInt(input, 10);
     if (Number.isNaN(parsed)) return;
@@ -54,13 +56,19 @@ export default function PuzzleScreen({ navigation, route }: Props) {
       const next = index + 1;
       setInput("");
       if (next >= problems.length) {
-        // Solved everything — dismiss
+        // Solved everything — dismiss the alarm
+        if (alarm) {
+          await notifee.cancelDisplayedNotification(`alarm-${alarm.id}`);
+          // If repeating, schedule the next occurrence
+          if (alarm.repeatDays.length > 0) {
+            await rescheduleAlarm(alarm);
+          }
+        }
         navigation.goBack();
       } else {
         setIndex(next);
       }
     } else {
-      // Wrong: flash, clear input, refocus
       setWrongFlash(true);
       setTimeout(() => setWrongFlash(false), 300);
       setInput("");

@@ -12,6 +12,7 @@ import {
 import { RootStackParamList } from "../../App";
 import { loadAlarms, upsertAlarm } from "../storage";
 import { Alarm } from "../types";
+import { rescheduleAlarm } from "../notifications/scheduler";
 
 type Props = NativeStackScreenProps<RootStackParamList, "AlarmList">;
 
@@ -28,6 +29,7 @@ export default function AlarmListScreen({ navigation }: Props) {
   const toggleEnabled = async (alarm: Alarm) => {
     const updated = { ...alarm, enabled: !alarm.enabled };
     const all = await upsertAlarm(updated);
+    await rescheduleAlarm(updated);
     setAlarms(all);
   };
 
