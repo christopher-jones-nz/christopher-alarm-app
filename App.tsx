@@ -6,6 +6,12 @@ import AlarmListScreen from "./src/screens/AlarmListScreen";
 import AlarmEditScreen from "./src/screens/AlarmEditScreen";
 import PuzzleScreen from "./src/screens/PuzzleScreen";
 import { setupNotifications } from "./src/notifications/setup";
+import notifee from "@notifee/react-native";
+import {
+  handleForegroundEvent,
+  initFromKilledState,
+} from "./src/notifications/handlers";
+import { navigationRef } from "./src/navigation/ref";
 
 export type RootStackParamList = {
   AlarmList: undefined;
@@ -18,10 +24,12 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
   useEffect(() => {
     setupNotifications();
+    notifee.onForegroundEvent(handleForegroundEvent);
+    initFromKilledState();
   }, []);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <StatusBar style="auto" />
       <Stack.Navigator initialRouteName="AlarmList">
         <Stack.Screen

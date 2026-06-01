@@ -16,6 +16,7 @@ import { RootStackParamList } from "../../App";
 import { deleteAlarm, loadAlarms, upsertAlarm } from "../storage";
 import { Alarm, Difficulty } from "../types";
 import { cancelAlarm, rescheduleAlarm } from "../notifications/scheduler";
+import notifee from "@notifee/react-native";
 
 type Props = NativeStackScreenProps<RootStackParamList, "AlarmEdit">;
 
@@ -92,6 +93,7 @@ export default function AlarmEditScreen({ navigation, route }: Props) {
   const save = async () => {
     await upsertAlarm(alarm);
     await rescheduleAlarm(alarm);
+    console.log("Triggers:", await notifee.getTriggerNotifications());
     navigation.goBack();
   };
 
