@@ -73,8 +73,7 @@ export default function AlarmEditScreen({ navigation, route }: Props) {
     setAlarm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const onTimeChange = (event: any, selected?: Date) => {
-    // Android fires 'dismissed' when the user cancels; ignore it.
+  const onValueChange = (event: any, selected?: Date) => {
     if (Platform.OS === "android") setShowPicker(false);
     if (event.type === "dismissed" || !selected) return;
     setField("time", dateToTimeString(selected));
@@ -128,7 +127,7 @@ export default function AlarmEditScreen({ navigation, route }: Props) {
           mode="time"
           is24Hour
           display={Platform.OS === "ios" ? "spinner" : "default"}
-          onChange={onTimeChange}
+          onValueChange={onValueChange}
         />
       ) : null}
 

@@ -92,12 +92,12 @@ export default function PuzzleScreen({ navigation, route }: Props) {
         ref={inputRef}
         style={styles.input}
         value={input}
-        onChangeText={setInput}
+        onChangeText={(t) => setInput(t.replace(/[^0-9]/g, ""))}
         onSubmitEditing={onSubmit}
-        keyboardType="numbers-and-punctuation"
+        keyboardType="number-pad"
         autoFocus
         returnKeyType="done"
-        blurOnSubmit={false}
+        submitBehavior="submit"
         placeholder="?"
         placeholderTextColor="#666"
       />

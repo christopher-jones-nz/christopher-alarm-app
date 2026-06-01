@@ -37,19 +37,21 @@ export function generateProblem(difficulty: Difficulty): MathProblem {
     }
 
     case "hard": {
-      // Two-digit ×, or three-term + / -
       const kind = pick(["mul", "chain"]);
       if (kind === "mul") {
         const a = randInt(11, 25);
         const b = randInt(11, 25);
         return { question: `${a} × ${b}`, answer: a * b };
       }
-      const a = randInt(20, 99);
-      const b = randInt(20, 99);
-      const c = randInt(20, 99);
+      // Three-term chain, kept non-negative at every step
+      let a = randInt(20, 99);
+      let b = randInt(20, 99);
       const op1 = pick(["+", "-"]);
-      const op2 = pick(["+", "-"]);
+      if (op1 === "-" && a < b) [a, b] = [b, a];
       const v1 = op1 === "+" ? a + b : a - b;
+
+      const op2 = pick(["+", "-"]);
+      const c = op2 === "-" ? randInt(1, Math.max(1, v1)) : randInt(20, 99);
       const v2 = op2 === "+" ? v1 + c : v1 - c;
       return { question: `${a} ${op1} ${b} ${op2} ${c}`, answer: v2 };
     }
