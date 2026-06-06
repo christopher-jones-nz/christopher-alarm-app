@@ -1,5 +1,5 @@
 import { navigationRef } from "../navigation/ref";
-import notifee, { EventType } from "@notifee/react-native";
+import notifee, { Event, EventType } from "@notifee/react-native";
 
 function goToPuzzle(alarmId: string) {
   if (navigationRef.isReady()) {
@@ -9,14 +9,14 @@ function goToPuzzle(alarmId: string) {
   }
 }
 
-export function handleForegroundEvent({ type, detail }) {
+export function handleForegroundEvent({ type, detail }: Event) {
   if (type === EventType.DELIVERED || type === EventType.PRESS) {
     const alarmId = detail.notification?.data?.alarmId;
     goToPuzzle(alarmId as string);
   }
 }
 
-export async function handleBackgroundEvent({ type, detail }) {
+export async function handleBackgroundEvent({ type, detail }: Event) {
   if (type === EventType.DELIVERED || type === EventType.PRESS) {
     const alarmId = detail.notification?.data?.alarmId;
     goToPuzzle(alarmId as string);
