@@ -10,7 +10,7 @@ module.exports = function withAlarmSound(config) {
         cfg.modRequest.projectRoot,
         "assets",
         "sounds",
-        "alarm.mp3",
+        "stan-walker-mo-ake-tonu-18s.mp3",
       );
       const destDir = path.join(
         cfg.modRequest.platformProjectRoot,
