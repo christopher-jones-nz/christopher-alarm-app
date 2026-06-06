@@ -8,6 +8,7 @@ import notifee, {
 } from "@notifee/react-native";
 import { Alarm } from "../types";
 import { ALARM_CHANNEL_ID } from "./setup";
+import { loadAlarms } from "../storage";
 
 // Compute the next time this alarm should fire (UTC ms epoch).
 // If repeatDays is empty: next occurrence today or tomorrow.
@@ -86,4 +87,17 @@ export async function cancelAlarm(alarmId: string): Promise<void> {
 export async function rescheduleAlarm(alarm: Alarm): Promise<void> {
   await cancelAlarm(alarm.id);
   if (alarm.enabled) await scheduleAlarm(alarm);
+}
+
+export async function restoreAllAlarms(): Promise<void> {
+  const alarms = await loadAlarms();
+  await Promise.all(
+    alarms.map(async (alarm) => {
+      if (alarm.enabled) {
+        await rescheduleAlarm(alarm).catch((error) => {
+          console.error(`Failed to reschedule alarm ${alarm.id}:`, error);
+        });
+      }
+    }),
+  );
 }

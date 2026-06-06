@@ -12,6 +12,7 @@ import {
   initFromKilledState,
 } from "./src/notifications/handlers";
 import { navigationRef } from "./src/navigation/ref";
+import { restoreAllAlarms } from "./src/notifications/scheduler";
 
 export type RootStackParamList = {
   AlarmList: undefined;
@@ -23,13 +24,19 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   useEffect(() => {
-    setupNotifications();
-    notifee.onForegroundEvent(handleForegroundEvent);
-    initFromKilledState();
+    (async () => {
+      await setupNotifications();
+      await restoreAllAlarms();
+    })();
+    const unsubscribe = notifee.onForegroundEvent(handleForegroundEvent);
+    return () => unsubscribe();
   }, []);
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => initFromKilledState()}
+    >
       <StatusBar style="auto" />
       <Stack.Navigator initialRouteName="AlarmList">
         <Stack.Screen
