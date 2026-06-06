@@ -12,8 +12,7 @@ import { RootStackParamList } from "../../App";
 import { generateProblems } from "../math/generator";
 import { loadAlarms } from "../storage";
 import { Alarm, MathProblem, PROBLEMS_PER_ALARM } from "../types";
-import notifee from "@notifee/react-native";
-import { rescheduleAlarm } from "../notifications/scheduler";
+import { cancelDisplayedFor } from "../notifications/scheduler";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Puzzle">;
 
@@ -58,11 +57,7 @@ export default function PuzzleScreen({ navigation, route }: Props) {
       if (next >= problems.length) {
         // Solved everything — dismiss the alarm
         if (alarm) {
-          await notifee.cancelDisplayedNotification(`alarm-${alarm.id}`);
-          // If repeating, schedule the next occurrence
-          if (alarm.repeatDays.length > 0) {
-            await rescheduleAlarm(alarm);
-          }
+          await cancelDisplayedFor(alarm.id);
         }
         navigation.goBack();
       } else {
