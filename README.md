@@ -44,6 +44,17 @@ The app will download and launch on your phone. Edit `App.tsx` and save — chan
 - **`npm install` fails:** delete `node_modules` and `package-lock.json`, then run `npm install` again.
 - **Nothing happens after scanning:** make sure no firewall is blocking the Expo dev server (default port 8081).
 
+### Xiaomi (MIUI) setup
+
+MIUI aggressively kills background apps. After installing, in **Settings → Apps → christopher-alarm-app**:
+
+- **Autostart** → enable
+- **Battery saver** → No restrictions
+- **Other permissions** → enable "Start in background" and "Show on Lock screen"
+- Untick **"Pause app activity if unused"**
+
+Re-apply after every reinstall — MIUI resets these.
+
 ## Note
 
 This guide will go out of date once we add native modules (e.g. Notifee for alarm notifications). At that point, Expo Go stops working and we'll need a custom dev build — instructions will follow when we get there.
