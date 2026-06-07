@@ -13,6 +13,7 @@ import { generateProblems } from "../math/generator";
 import { loadAlarms } from "../storage";
 import { Alarm, MathProblem, PROBLEMS_PER_ALARM } from "../types";
 import { cancelDisplayedFor } from "../notifications/scheduler";
+import { useAudioPlayer, setAudioModeAsync } from "expo-audio";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Puzzle">;
 
@@ -24,6 +25,9 @@ export default function PuzzleScreen({ navigation, route }: Props) {
   const [input, setInput] = useState("");
   const [wrongFlash, setWrongFlash] = useState(false);
   const inputRef = useRef<TextInput>(null);
+  const player = useAudioPlayer(
+    require("../../assets/sounds/stan_walker_mo_ake_tonu_18s.mp3"),
+  );
 
   // Load the alarm, then generate problems based on its difficulty
   useEffect(() => {
@@ -43,6 +47,42 @@ export default function PuzzleScreen({ navigation, route }: Props) {
     const sub = BackHandler.addEventListener("hardwareBackPress", () => true);
     return () => sub.remove();
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    let fadeTimer: ReturnType<typeof setInterval> | null = null;
+
+    (async () => {
+      await setAudioModeAsync({
+        playsInSilentMode: true,
+        interruptionMode: "doNotMix",
+        shouldPlayInBackground: false,
+      });
+      if (cancelled) return;
+
+      player.loop = true;
+      player.volume = 0.2;
+      player.play();
+
+      let i = 0;
+      const steps = 60;
+      fadeTimer = setInterval(() => {
+        i += 1;
+        player.volume = Math.min(0.2 + (0.8 * i) / steps, 1.0);
+        if (i >= steps && fadeTimer) clearInterval(fadeTimer);
+      }, 1000);
+    })();
+
+    return () => {
+      cancelled = true;
+      if (fadeTimer) clearInterval(fadeTimer);
+      try {
+        player.pause();
+      } catch {
+        // Player may already be released by the hook
+      }
+    };
+  }, [player]);
 
   const current = problems[index];
 

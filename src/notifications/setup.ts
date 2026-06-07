@@ -1,6 +1,6 @@
 import notifee, { AndroidImportance } from "@notifee/react-native";
 
-export const ALARM_CHANNEL_ID = "alarms-v2";
+export const ALARM_CHANNEL_ID = "alarms-v3";
 
 export async function setupNotifications(): Promise<void> {
   // Request permission (Android 13+ requires this at runtime)
@@ -11,7 +11,6 @@ export async function setupNotifications(): Promise<void> {
     id: ALARM_CHANNEL_ID,
     name: "Alarms",
     importance: AndroidImportance.HIGH,
-    sound: "stan_walker_mo_ake_tonu_18s",
     vibration: true,
     vibrationPattern: [500, 500, 500, 500],
     bypassDnd: true,

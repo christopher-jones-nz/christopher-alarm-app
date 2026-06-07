@@ -41,7 +41,8 @@
           }
         }
       ],
-      "./plugins/withAlarmSound"
+      "./plugins/withAlarmSound",
+      "expo-audio"
     ]
   }
 }
