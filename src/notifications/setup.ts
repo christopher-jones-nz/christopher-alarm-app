@@ -11,7 +11,7 @@ export async function setupNotifications(): Promise<void> {
     id: ALARM_CHANNEL_ID,
     name: "Alarms",
     importance: AndroidImportance.HIGH,
-    sound: "stan-walker-mo-ake-tonu-18s",
+    sound: "stan_walker_mo_ake_tonu_18s",
     vibration: true,
     vibrationPattern: [500, 500, 500, 500],
     bypassDnd: true,

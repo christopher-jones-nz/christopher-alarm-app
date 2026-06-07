@@ -10,7 +10,7 @@ module.exports = function withAlarmSound(config) {
         cfg.modRequest.projectRoot,
         "assets",
         "sounds",
-        "stan-walker-mo-ake-tonu-18s.mp3",
+        "stan_walker_mo_ake_tonu_18s.mp3",
       );
       const destDir = path.join(
         cfg.modRequest.platformProjectRoot,
@@ -23,7 +23,7 @@ module.exports = function withAlarmSound(config) {
       fs.mkdirSync(destDir, { recursive: true });
       fs.copyFileSync(
         src,
-        path.join(destDir, "stan-walker-mo-ake-tonu-18s.mp3"),
+        path.join(destDir, "stan_walker_mo_ake_tonu_18s.mp3"),
       );
       return cfg;
     },
