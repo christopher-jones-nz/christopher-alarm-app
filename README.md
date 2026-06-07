@@ -5,10 +5,12 @@ Get the app running on your phone in a few minutes.
 ## Prerequisites
 
 **On your computer:**
+
 - [Node.js](https://nodejs.org) 18 or higher (check with `node --version`)
 - [Git](https://git-scm.com)
 
 **On your phone:**
+
 - The **Expo Go** app from the [Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent) (Android) or [App Store](https://apps.apple.com/app/expo-go/id982107779) (iOS)
 
 That's it — no Android Studio, no Xcode, no SDKs.
@@ -45,3 +47,16 @@ The app will download and launch on your phone. Edit `App.tsx` and save — chan
 ## Note
 
 This guide will go out of date once we add native modules (e.g. Notifee for alarm notifications). At that point, Expo Go stops working and we'll need a custom dev build — instructions will follow when we get there.
+
+## Wireless ADB setup
+
+One-time per phone — initial pairing requires USB:
+
+```bash
+adb tcpip 5555                # restart adb on phone, listening on TCP
+adb shell ip route            # find phone IP (or check Settings → About → Status)
+adb connect 192.168.x.x:5555  # connect over network
+adb devices                   # verify; should show the IP as 'device'
+```
+
+Re-pair after phone reboot (phone drops back to USB-only mode).
